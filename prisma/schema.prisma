@@ -14,10 +14,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Difficulty {
+    EASY
+    MEDUIM
+    HARD
+}
+
 enum UserRole {
     ADMIN
     USER
 }
+
 
 
 model User {
@@ -29,5 +36,31 @@ model User {
     password String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    problems Problem[]
 
+}
+
+
+model Problem {
+    id String @default(uuid())
+    title String @unique
+    description String
+    difficulty Difficulty
+    tags String[]
+    userId String
+    examples Json
+    constraints String
+    hints String?
+    editorials String?
+
+    testcases Json
+    codeSnippets Json
+    referenceSolutions Json
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // relationship
+
+    user User @relation(fields: [userId] , references: [id] ,onDelete: Cascade)
 }
