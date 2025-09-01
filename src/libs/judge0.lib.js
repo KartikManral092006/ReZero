@@ -1,49 +1,60 @@
+import axios from "axios";
+
 export const getJudge0languageId = (language) => {
-    const languageMap = {
-        "C": 50,
-        "C++": 54,
-        "Java": 62,
-        "Python": 71,
-        "JavaScript": 63,
-        "Ruby": 72,
-        "Go": 60,
-        "Swift": 83,
-        "Kotlin": 78,
+  const languageMap = {
+        python: 71,
+        cpp: 54,
+        javascript: 63,
+        java: 62,
     };
-    return languageMap[language.toUppercase()] || null;
-}
-
-export const submitbatchToJudge0 = async (submissions) => {
-        const {data} = await axios.post(`${process.env.JUDGE0_API_URL}/submissions/batch?base_64_encoded=false`,{
-            submissions,
-        });
-
-
-        console.log("Subbmision Results from Judge0", data);
-        return data;
-}
-
-// Sleep utility
+    return languageMap[language.toLowerCase()] || null;
+};
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+console.log(process.env.RAPIDAPI_KEY);
+const JUDGE0_CONFIG = {
+  baseURL: 'https://judge0-ce.p.rapidapi.com',
+  headers: {
+    'X-RapidAPI-Key': process.env.RAPIDAPI_KEY, // Your RapidAPI key
+    'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+    'Content-Type': 'application/json'
+  }
+};
 
-// creating the polling mechanism
+
+
+export const submitBatchToJudge0 = async (submissions) => {
+     const { data } = await axios.post(
+            `${JUDGE0_CONFIG.baseURL}/submissions/batch?base64_encoded=false`,
+            { submissions },
+            { headers: JUDGE0_CONFIG.headers }
+        );
+
+    console.log("Submission Results from Judge0", data);
+    return data;
+};
+
+
 export const pollBatchResultsFromJudge0 = async (tokens) => {
-    while(true){
-        const {data} = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch`,{
-            params:{
-                tokens:tokens.join(","),
-                base_64_encoded:false,
-            } 
-        });
-        const results = data.submissions;
-        const isAllDone = results.every((result)=>
-            result.ststus.id  !==1 && result.status.is!== 2)
-        if(isAllDone){
-            return results;
-        }
-      await sleep(1000) // waiting for 2 seconds before next poll
-    }
+    const url = `${JUDGE0_CONFIG.baseURL}/submissions/batch`;
 
-}
+    while (true) {
+        const { data } = await axios.get(url, {
+            params: {
+                tokens: tokens.join(","),
+                base64_encoded: false,
+            },
+            headers: JUDGE0_CONFIG.headers
+        });
+
+        const results = data.submissions;
+        const isAllDone = results.every(
+            (result) => result.status.id !== 1 && result.status.id !== 2
+        );
+
+        if (isAllDone) return results;
+
+        await sleep(1000);
+    }
+};

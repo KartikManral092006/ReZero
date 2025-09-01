@@ -42,8 +42,8 @@ model User {
 
 
 model Problem {
-    id String @default(uuid())
-    title String @unique
+    id String @id @default(uuid())
+    title String
     description String
     difficulty Difficulty
     tags String[]
@@ -52,15 +52,12 @@ model Problem {
     constraints String
     hints String?
     editorials String?
-
     testcases Json
     codeSnippets Json
     referenceSolutions Json
-
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     // relationship
-
     user User @relation(fields: [userId] , references: [id] ,onDelete: Cascade)
+
 }
