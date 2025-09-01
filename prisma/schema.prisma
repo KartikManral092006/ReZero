@@ -37,7 +37,8 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     problems Problem[]
-
+    submission Submission[]
+    problemsSolved ProblemSolved[]
 }
 
 
@@ -59,5 +60,63 @@ model Problem {
     updatedAt DateTime @updatedAt
     // relationship
     user User @relation(fields: [userId] , references: [id] ,onDelete: Cascade)
+    submission Submission[]
+    problemSolvedBy ProblemSolved[]
+}
 
+model Submission {
+    id String @id @default(uuid())
+    userId String
+    problemId String
+    sourceCode Json
+    language String
+    stdin String?
+    stdout String?
+    stderr String?
+    compiledOutput String?
+    status String
+    memory String?
+    time String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+
+    user User  @relation(fields: [userId] , references: [id] ,onDelete: Cascade)
+
+    problem Problem  @relation(fields: [problemId] , references: [id] ,onDelete: Cascade)
+
+    testCases Testcaseresult[]
+ }
+ model Testcaseresult {
+    id String @id @default(uuid())
+    submissionId String
+    testCase Int
+    passed Boolean
+    expectedOutput String?
+    compileOutput String
+    stdout String?
+    stderr String?
+    time String?
+    memory String?
+    status String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    submission Submission  @relation(fields: [submissionId] , references: [id] ,onDelete: Cascade)
+    @@index([submissionId])
+}
+
+model ProblemSolved{
+    id String @id @default(uuid())
+    userId String
+    problemId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user User  @relation(fields: [userId] , references: [id] ,onDelete: Cascade)
+    problem Problem  @relation(fields: [problemId] , references: [id] ,onDelete: Cascade)
+
+    @@unique([userId, problemId])
 }
