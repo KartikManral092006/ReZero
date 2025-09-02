@@ -243,31 +243,33 @@ export const deleteProblem = async (req, res) => {
 }
 
 export const getAllProblemsSolvedByUser = async (req, res) => {
-    const userId = req.user.id;
-
     try {
-        const submissions = await db.submission.findMany({
+        const problems = await db.problem.findMany({
             where:{
-                userId,
-                status:"ACCEPTED"
+                problemSolvedBy:{
+                    some:{
+                        userId:req.user.id
+                    }
+
+                }
             },
             include:{
-                problem:true
+                problemSolvedBy:{
+                    where:{
+                        userId:req.user.id,
+                    }
+                }
             }
-        })
-
-        const solvedProblems = submissions.map((submission)=>submission.problem);
+        }) 
 
         res.status(200).json({
             success:true,
-            message:"Solved problems fetched successfully",
-            problems:solvedProblems
+            message:"Problem Fecthed SUccesfully",
         })
-
     } catch (error) {
-        console.error("Error in get all problems solved by user controller", error);
+        console.error("Error in get all problems controller", error);
         res.status(500).json({
-            error:"Solved problems cannot be fetched due to internal server error",
+            error:"Problems cannot be fetched",
         })
     }
 }
