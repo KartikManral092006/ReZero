@@ -94,7 +94,7 @@ model Submission {
     testCase Int
     passed Boolean
     expectedOutput String?
-    compileOutput String
+    compileOutput String?
     stdout String?
     stderr String?
     time String?

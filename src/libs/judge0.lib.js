@@ -58,3 +58,16 @@ export const pollBatchResultsFromJudge0 = async (tokens) => {
         await sleep(1000);
     }
 };
+
+
+// Utility Function  to get language name from language ID
+export function getLanguageName(LanguageId)
+{
+    const Language_Name = {
+        71: "Python",
+        54: "C++",
+        63: "JavaScript",
+        62: "Java",
+    };
+    return Language_Name[LanguageId] || "Unknown Language";
+}
