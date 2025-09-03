@@ -36,7 +36,7 @@ export const authMiddleware = async (req, res, next) => {
         }
      })
      if(!user){
-        return res.srtatus(404).json({
+        return res.status(404).json({
             message:"User ot Found!",
         })
      }

@@ -15,7 +15,7 @@ export const register = async (req, res) =>{
         })
         // Check is there is existing user in the database
         if(existingUser){
-            res.status(400).json({
+            return res.status(400).json({
                 error: "User Already Exist",
             })
         }
@@ -40,13 +40,13 @@ export const register = async (req, res) =>{
         // storing the generated token in a cookie
         res.cookie("jwt", token , {
             httpOnly:true,
-            sameSite: "strict",
+            sameSite: "lax",
             secure:process.env.NODE_ENV !== "development",
             maxAge:1000 * 60 * 60 * 24 * 7 // 7days
         })
 
 
-        res.status(200).json({
+         res.status(200).json({
             message:"User created Successfully",
             user:{
                 id:newUser.id,
@@ -96,7 +96,7 @@ export const login = async (req, res) =>{
         // storing the generated token in a cookie
         res.cookie("jwt", token , {
             httpOnly:true,
-            sameSite: "strict",
+            sameSite: "lax",
             secure:process.env.NODE_ENV !== "development",
             maxAge:1000 * 60 * 60 * 24 * 7 // 7days
         })
@@ -124,7 +124,7 @@ export const logout = async (req, res) =>{
     try {
         res.clearCookie("jwt",{
             httpOnly:true,
-            sameSite: "strict",
+            sameSite: "lax",
             secure:process.env.NODE_ENV !== "development",
         })
         res.status(200).json({
@@ -147,7 +147,7 @@ export const check = async (req, res) =>{
             message:"Authnentication Succesfull",
             user:req.user
 
-        }) 
+        })
     } catch (error) {
         console.error("Error in check controller", error);
         res.status(500).json({

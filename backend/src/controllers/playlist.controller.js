@@ -93,11 +93,86 @@ export const createPlaylist = async(req,res)=>{
 }
 
 export const addProblemToPlaylist = async(req,res)=>{
-    
+    try {
+        const {playlistId} = req.params
+        const {problemIds} = req.body
+
+        if(!Array.isArray(problemIds) || problemIds.length === 0){
+            return res.status(400).json({
+                error:"Missing problemIds",
+            })
+        }
+
+        // Create record for each problem in the Playlist
+        const problemsInPlaylist = await db.problemInPlaylist.createMany({
+            data:problemIds.map((problemId)=>({
+                    playlistId,
+                    problemId
+            }))
+        }) 
+
+        res.status(201).json({
+            success:true,
+            message:"Problems added to playlist successfully",
+            problemsInPlaylist
+        })
+    } catch (error) {
+        console.error("Error adding problems to playlist:", error);
+        res.status(500).json({
+            error:"Failed to add problems to playlist",
+        })
+    }
 }
 
-export const deletePlaylist = async(req,res)=>{}
+export const deletePlaylist = async(req,res)=>{
+    try {
+        const {playlistId} = req.params
 
-export const removeProblemByPlaylistId = async(req,res)=>{}
+        const deletedPlaylist = await db.playlist.delete({
+            where:{id:playlistId}
+        })
+        res.status(200).json({
+            succes:true,
+            message:"Playlist deleted successfully",
+            deletedPlaylist
+        })
+    } catch (error) {
+        console.error("Error deleting playlist:", error);
+        res.status(500) .json({
+            error:"Failed to delete playlist",
+        })
+    }
+}
 
-export const updatePlaylist = async(req,res)=>{}
+export const removeProblemByPlaylistId = async(req,res)=>{
+   try {
+     const {playlistId} = req.params
+     const {problemIds} = req.body
+     if(!Array.isArray(problemIds) || problemIds.length === 0){
+            return res.status(400).json({
+                error:"Missing problemIds",
+            })
+        }
+
+        const deletedProblem = await db.problemInPlaylist.delete({
+            where:{
+                playlistId,
+                problemId:{
+                    in:problemIds
+                }
+            }
+        })
+
+        res.status(200).json({
+            success:true,
+            message:"Problems removed from playlist successfully",
+            deletedProblem
+        })
+   } catch (error) {
+    console.error("Error removing problems from playlist:", error);
+    res.status(500).json({
+        error:"Failed to remove problems from playlist",
+    })
+   }
+
+}

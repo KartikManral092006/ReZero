@@ -6,8 +6,7 @@ import{
     createPlaylist,
     addProblemToPlaylist,
     deletePlaylist,
-    removeProblemByPlaylistId,
-    updatePlaylist
+    removeProblemByPlaylistId
 }from  "../controllers/playlist.controller.js"
 
 
@@ -24,8 +23,5 @@ playlistRoute.post('/:playlistId/add-problem',authMiddleware,addProblemToPlaylis
 playlistRoute.delete('/delete-playlist/:playlistId',authMiddleware,deletePlaylist);
 
 playlistRoute.delete('/:playlistId/remove-problem',authMiddleware,removeProblemByPlaylistId);
-
-playlistRoute.put('/update-playlist/:playlistId',authMiddleware,updatePlaylist);
-
 
 export default playlistRoute;

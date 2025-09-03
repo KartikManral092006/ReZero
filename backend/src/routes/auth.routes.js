@@ -15,5 +15,4 @@ authRoute.post('/logout',authMiddleware,logout);
 authRoute.get('/check',authMiddleware,check);
 
 
-
 export default authRoute;
