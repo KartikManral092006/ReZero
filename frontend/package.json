@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.12",
     "@tsparticles/engine": "^3.9.1",
     "@tsparticles/react": "^3.0.0",
@@ -19,6 +20,7 @@
     "clsx": "^2.1.1",
     "daisyui": "^5.1.6",
     "lucide-react": "^0.542.0",
+    "monaco-editor": "^0.52.2",
     "motion": "^12.23.12",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

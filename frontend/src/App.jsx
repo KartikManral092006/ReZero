@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import HomePage from "./pages/HomePage.jsx"
+import {HomePage} from "./pages/HomePage.jsx"
 import LoginPage from "./pages/LoginPage.jsx"
 import SignUpPage from "./pages/SignUpPage.jsx"
 import { useAuthStore } from "./store/useAuthStore";
@@ -10,7 +10,7 @@ import { Loader } from "lucide-react";
 import {Layout} from "./layout/layout.jsx"
 import AdminRoute from "./components/AdminRoute.jsx";
 import AddProblem from  "./pages/AddProblem.jsx";
-
+import ProblemPage from "./pages/ProblemPage.jsx";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -47,6 +47,11 @@ const App = () => {
           path="/signup"
           element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
         />
+
+    <Route
+     path="/problem/:id"
+      element={authUser ? <ProblemPage /> : <Navigate to={"/login"}/>}
+      />
 
         <Route element={<AdminRoute />}>
           <Route

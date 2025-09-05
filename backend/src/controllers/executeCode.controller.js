@@ -77,7 +77,7 @@ export const executeCode = async (req, res) => {
                     stdout:JSON.stringify(detailedResults.map(r => r.stdout)),
                     stderr:detailedResults.some(r => r.stderr)? JSON.stringify(detailedResults.map(r => r.stderr)):null,
                     compiledOutput:detailedResults.some(r => r.compile_output)? JSON.stringify(detailedResults.map(r => r.compile_output)):null,
-                    status:  allPassed ? "Accepted" : "Wrong Answer",
+                    status:  allPassed ? "Accepted" : "Rejected",
                     memory:detailedResults.some((r)=>r.memory) ? JSON.stringify(detailedResults.map(r => r.memory)):null,
                     time:detailedResults.some((r)=>r.time) ? JSON.stringify(detailedResults.map(r => r.time)):null,
                 }
@@ -127,7 +127,7 @@ export const executeCode = async (req, res) => {
 
 
         res.status(200).json({
-            sucess:true,
+            success:true,
             message:"Code executed successfully",
             submission:submissionWithTestcases,
         })

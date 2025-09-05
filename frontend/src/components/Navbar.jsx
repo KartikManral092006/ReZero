@@ -4,8 +4,6 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import {LogoutButton} from "./LogoutButton";
 
-
-
 const Navbar = ()=>{
 
     const {authUser} = useAuthStore()
